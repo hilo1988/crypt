@@ -4,10 +4,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import com.yoidukigembu.crypt.aes.CbcCryptor;
-import com.yoidukigembu.crypt.exception.CryptException;
-
 import junit.framework.TestCase;
+import tech.hilo.crypt.aes.CbcCryptor;
+import tech.hilo.crypt.exception.CryptException;
 
 @RunWith(JUnit4.class)
 public class CbcCryptorTest extends TestCase {

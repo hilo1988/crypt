@@ -1,91 +1,84 @@
-package com.yoidukigembu.crypt.aes;
+package tech.hilo.crypt.aes;
 
 import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
-import com.yoidukigembu.crypt.constants.Constants;
-import com.yoidukigembu.crypt.exception.CryptException;
+import tech.hilo.crypt.constants.Constants;
+import tech.hilo.crypt.exception.CryptException;
 
 /**
- * AES暗号化を行うクラス
+ * AES/CBC/PKCS5Padding での暗号化クラス<br>
+ * IVを扱うAES
  * @author hilo
  *
  */
-public class AesCryptor extends BaseAes {
-	
-	/** AES */
-	private static final String AES = "AES";
-	
+public class CbcCryptor extends BaseAes {
+
+	private static final String CBC = "AES/CBC/PKCS5Padding";
 	
 	/**
 	 * 暗号化するAESのbitの長さを指定してインスタンスを生成<br>
 	 * 生成されるキーはランダム
 	 */
-	public AesCryptor(int bitLength) {
+	public CbcCryptor(int bitLength) {
 		super(generateRandomKey(bitLength));
 	}
-
+	
 	/**
 	 * キーを指定してインスタンスを生成
 	 */
-	public AesCryptor(Key key) {
+	public CbcCryptor(Key key) {
 		super(key);
 	}
 	
 	/**
 	 * キーを指定してインスタンスを生成
 	 */
-	public AesCryptor(byte[] key) {
+	public CbcCryptor(byte[] key) {
 		super(key);
 	}
-
-	/**
-	 * @deprecated this class does not use IV.
-	 */
-	@Deprecated
-	@Override
-	public void setIv(byte[] iv) {
-		throw new UnsupportedOperationException("this class does not use IV.");
-	}
-
 	
 	/**
-	 * @deprecated this class does not use IV.
+	 * キーとIVを指定してインスタンスを生成
 	 */
-	@Deprecated
-	@Override
-	public byte[] getIv() {
-		throw new UnsupportedOperationException("this class does not use IV.");
+	public CbcCryptor(Key key, byte[] iv) {
+		super(key, iv);
 	}
 	
 	/**
-	 * @deprecated this class does not use IV.
+	 * キーとIVを指定してインスタンスを生成
 	 */
-	@Deprecated
-	@Override
-	public boolean existsIv() {
-		return false;
+	public CbcCryptor(byte[] key, byte[] iv) {
+		super(key, iv);
 	}
-	
-	
+
 
 	
+
+
+	
+
+
+	
+
+
 	/**
-	 * AESで暗号化
+	 * CBCで暗号化
 	 * @param data 暗号化する文字
 	 * @return 暗号化されたデータ
 	 */
-	public byte[] encryptCbc(String data) {
+	public byte[] encrypt(String data) {
 		return encrypt(data, Constants.UTF8);
 	}
 	
 	
 	/**
-	 * AESで暗号化
+	 * CBCで暗号化
 	 * @param data 暗号化する文字
 	 * @param encode エンコード
 	 * @return 暗号化されたデータ
@@ -102,15 +95,20 @@ public class AesCryptor extends BaseAes {
 	
 	
 	/**
-	 * AESで暗号化
+	 * CBCで暗号化
 	 * @param data 暗号化するデータ
 	 * @return 暗号化されたデータ
 	 */
 	public byte[] encrypt(byte[] data) {
 		
 		try {
-			Cipher cipher = Cipher.getInstance(AES);
-			cipher.init(Cipher.ENCRYPT_MODE, getKey());
+			Cipher cipher = Cipher.getInstance(CBC);
+			if (existsIv()) {
+				cipher.init(Cipher.ENCRYPT_MODE, getKey(), new SecureRandom(getIv()));
+			} else {
+				cipher.init(Cipher.ENCRYPT_MODE, getKey());
+				setIv(cipher.getIV());
+			}
 			return cipher.doFinal(data);
 		} catch (Exception e) {
 			throw new CryptException("data could not be encrypted CBC", e);
@@ -119,14 +117,14 @@ public class AesCryptor extends BaseAes {
 	
 	
 	/**
-	 * AESで復元
+	 * CBCで復元
 	 * @param data 復元するデータ
 	 * @return 復元されたデータ
 	 */
 	public byte[] decrypt(byte[] data) {
 		try {
-			Cipher cipher = Cipher.getInstance(AES);
-			cipher.init(Cipher.DECRYPT_MODE, getKey());
+			Cipher cipher = Cipher.getInstance(CBC);
+			cipher.init(Cipher.DECRYPT_MODE, getKey(), new IvParameterSpec(getIv()));
 			return cipher.doFinal(data);
 		} catch (Exception e) {
 			throw new CryptException("data could not be decrypted CBC", e);
@@ -135,7 +133,7 @@ public class AesCryptor extends BaseAes {
 	
 	
 	/**
-	 * AESで復元して文字列で返す
+	 * CBCで復元して文字列で返す
 	 * @param data 復元するデータ
 	 * @return 復元されたデータの文字列
 	 */
@@ -144,7 +142,7 @@ public class AesCryptor extends BaseAes {
 	}
 	
 	/**
-	 * AESで復元して文字列で返す
+	 * CBCで復元して文字列で返す
 	 * @param data 復元するデータ
 	 * @param Stringのエンコード
 	 * @return 復元されたデータの文字列
@@ -157,22 +155,14 @@ public class AesCryptor extends BaseAes {
 			throw new CryptException(String.format("encode[%s] is not supported.", encode), e);
 		}
 	}
-	
 
+	
 	/**
 	 * ランダムキーの作成
 	 * @param bitLength bitの長さ
 	 * @return ランダムキー
 	 */
-	private static Key generateRandomKey(int bitLength) {
-		try {
-			KeyGenerator generator = KeyGenerator.getInstance(AES);
-			SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-			generator.init(bitLength, random);
-			return generator.generateKey();
-		} catch (Exception e) {
-			throw new CryptException("randomKey could not be generated", e);
-		}
+	public static Key generateRandomKey(int bitLength) {
+		return new SecretKeySpec(generateRandomBytes(bitLength), "AES");
 	}
-	
 }

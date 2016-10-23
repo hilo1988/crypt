@@ -1,4 +1,4 @@
-package com.yoidukigembu.crypt.aes;
+package tech.hilo.crypt.aes;
 
 import java.security.Key;
 import java.util.Random;

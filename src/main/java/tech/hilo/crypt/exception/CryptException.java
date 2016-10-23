@@ -1,4 +1,4 @@
-package com.yoidukigembu.crypt.exception;
+package tech.hilo.crypt.exception;
 
 public class CryptException extends RuntimeException {
 
