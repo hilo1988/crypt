@@ -8,7 +8,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import tech.hilo.crypt.constants.Constants;
+import tech.hilo.crypt.constants.CryptConstants;
 import tech.hilo.crypt.exception.CryptException;
 
 /**
@@ -73,7 +73,7 @@ public class CbcCryptor extends BaseAes {
 	 * @return 暗号化されたデータ
 	 */
 	public byte[] encrypt(String data) {
-		return encrypt(data, Constants.UTF8);
+		return encrypt(data, CryptConstants.UTF8);
 	}
 	
 	
@@ -138,7 +138,7 @@ public class CbcCryptor extends BaseAes {
 	 * @return 復元されたデータの文字列
 	 */
 	public String decryptString(byte[] data) {
-		return decryptString(data, Constants.UTF8);
+		return decryptString(data, CryptConstants.UTF8);
 	}
 	
 	/**

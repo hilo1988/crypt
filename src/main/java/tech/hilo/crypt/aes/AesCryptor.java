@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 
-import tech.hilo.crypt.constants.Constants;
+import tech.hilo.crypt.constants.CryptConstants;
 import tech.hilo.crypt.exception.CryptException;
 
 /**
@@ -80,7 +80,7 @@ public class AesCryptor extends BaseAes {
 	 * @return 暗号化されたデータ
 	 */
 	public byte[] encryptCbc(String data) {
-		return encrypt(data, Constants.UTF8);
+		return encrypt(data, CryptConstants.UTF8);
 	}
 	
 	
@@ -140,7 +140,7 @@ public class AesCryptor extends BaseAes {
 	 * @return 復元されたデータの文字列
 	 */
 	public String decryptString(byte[] data) {
-		return decryptString(data, Constants.UTF8);
+		return decryptString(data, CryptConstants.UTF8);
 	}
 	
 	/**
