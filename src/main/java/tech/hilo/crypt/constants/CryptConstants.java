@@ -5,9 +5,11 @@ package tech.hilo.crypt.constants;
  * @author hilo
  *
  */
-public class Constants {
+public class CryptConstants {
 
-	private Constants() {}
+	private CryptConstants() {}
 	
 	public static final String UTF8 = "UTF-8";
+
+	public static final int LENGTH128 = 128;
 }
