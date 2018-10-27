@@ -1,4 +1,4 @@
-package tech.hilo.crypt.constants;
+package com.yoidukigembu.crypt.constants;
 
 /**
  * 定数クラス

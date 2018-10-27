@@ -5,19 +5,21 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import junit.framework.TestCase;
-import tech.hilo.crypt.aes.CbcCryptor;
-import tech.hilo.crypt.exception.CryptException;
+import com.yoidukigembu.crypt.aes.CbcCryptor;
+import com.yoidukigembu.crypt.exception.CryptException;
 
 @RunWith(JUnit4.class)
 public class CbcCryptorTest extends TestCase {
 
 	@Test
 	public void 暗号復元テスト() {
-		String src = "テストです。";
+		final String src = "sfdafkjas;dlflzd;zlsdn;falksdn;asdknf;la";
 		CbcCryptor cbc1 = new CbcCryptor(128);
 		byte[] cryptedData = cbc1.encrypt(src);
 		
 		assertEquals(src, cbc1.decryptString(cryptedData));
+
+		assertEquals("aaaaa", cbc1.decryptString(cbc1.encrypt("aaaaa")));
 		
 		CbcCryptor cbc2 = new CbcCryptor(cbc1.getKey(), cbc1.getIv());
 		assertEquals(src, cbc2.decryptString(cryptedData));
