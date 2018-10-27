@@ -15,10 +15,14 @@ public class CryptData implements Serializable {
 
     private static final long serialVersionUID = 9210353025268317628L;
 
-    /** キー */
+    /**
+     * キー
+     */
     private final byte[] key;
 
-    /** iv */
+    /**
+     * iv
+     */
     private final byte[] iv;
 
     public static CryptData newInstance(int length) {
