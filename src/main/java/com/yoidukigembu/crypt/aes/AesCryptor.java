@@ -72,6 +72,10 @@ public class AesCryptor extends BaseAes {
         return false;
     }
 
+    @Override
+    String getTransformation() {
+        return AES;
+    }
 
     /**
      * AESで暗号化
@@ -83,41 +87,6 @@ public class AesCryptor extends BaseAes {
         return encrypt(data, CryptConstants.UTF8);
     }
 
-
-    /**
-     * AESで暗号化
-     *
-     * @param data   暗号化する文字
-     * @param encode エンコード
-     * @return 暗号化されたデータ
-     */
-    public byte[] encrypt(String data, String encode) {
-        try {
-            byte[] src = data.getBytes(encode);
-            return encrypt(src);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new CryptException(String.format("encode[%s] is not supported.", encode), e);
-        }
-    }
-
-
-    /**
-     * AESで暗号化
-     *
-     * @param data 暗号化するデータ
-     * @return 暗号化されたデータ
-     */
-    public byte[] encrypt(byte[] data) {
-
-        try {
-            Cipher cipher = Cipher.getInstance(AES);
-            cipher.init(Cipher.ENCRYPT_MODE, getKey());
-            return cipher.doFinal(data);
-        } catch (Exception e) {
-            throw new CryptException("data could not be encrypted CBC", e);
-        }
-    }
 
 
     /**

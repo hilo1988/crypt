@@ -62,57 +62,10 @@ public class CbcCryptor extends BaseAes {
     }
 
 
-    /**
-     * CBCで暗号化
-     *
-     * @param data 暗号化する文字
-     * @return 暗号化されたデータ
-     */
-    public byte[] encrypt(String data) {
-        return encrypt(data, CryptConstants.UTF8);
+    @Override
+    String getTransformation() {
+        return CBC;
     }
-
-
-    /**
-     * CBCで暗号化
-     *
-     * @param data   暗号化する文字
-     * @param encode エンコード
-     * @return 暗号化されたデータ
-     */
-    public byte[] encrypt(String data, String encode) {
-        try {
-            byte[] src = data.getBytes(encode);
-            return encrypt(src);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new CryptException(String.format("encode[%s] is not supported.", encode), e);
-        }
-    }
-
-
-    /**
-     * CBCで暗号化
-     *
-     * @param data 暗号化するデータ
-     * @return 暗号化されたデータ
-     */
-    public byte[] encrypt(byte[] data) {
-
-        try {
-            Cipher cipher = Cipher.getInstance(CBC);
-            if (existsIv()) {
-                cipher.init(Cipher.ENCRYPT_MODE, getKey(), new IvParameterSpec(getIv()));
-            } else {
-                cipher.init(Cipher.ENCRYPT_MODE, getKey());
-                setIv(cipher.getIV());
-            }
-            return cipher.doFinal(data);
-        } catch (Exception e) {
-            throw new CryptException("data could not be encrypted CBC", e);
-        }
-    }
-
 
     /**
      * CBCで復元
