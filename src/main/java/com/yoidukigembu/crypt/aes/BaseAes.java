@@ -103,7 +103,6 @@ public abstract class BaseAes {
             byte[] src = data.getBytes(encode);
             return encrypt(src);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
             throw new CryptException(String.format("encode[%s] is not supported.", encode), e);
         }
     }
