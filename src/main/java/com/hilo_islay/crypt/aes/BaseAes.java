@@ -1,7 +1,7 @@
-package com.yoidukigembu.crypt.aes;
+package com.hilo_islay.crypt.aes;
 
-import com.yoidukigembu.crypt.constants.CryptConstants;
-import com.yoidukigembu.crypt.exception.CryptException;
+import com.hilo_islay.crypt.constants.CryptConstants;
+import com.hilo_islay.crypt.exception.CryptException;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;

@@ -1,6 +1,6 @@
-package com.yoidukigembu.crypt.valueobject;
+package com.hilo_islay.crypt.valueobject;
 
-import com.yoidukigembu.crypt.aes.CbcCryptor;
+import com.hilo_islay.crypt.aes.CbcCryptor;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
